@@ -10,15 +10,20 @@ func GetColors() (*DesktopColor, error) {
 
 	// TODO: implement fallback
 	if !present {
-		return &DesktopColor{}, errors.New("XDG_SESSION_DESKTOP not set, desktop unknown")
-	} else if desktop != "KDE" &&
-	desktop != "LXQT" {
+		desktop, present = os.LookupEnv("XDG_CURRENT_DESKTOP")
+		if !present {
+			return &DesktopColor{}, errors.New("XDG_SESSION_DESKTOP not set, desktop unknown")
+		}
+	}
+	
+	if desktop != "KDE" &&
+	desktop != "LXQt" {
 		return &DesktopColor{}, errors.New("unknown desktop enviornment, can't find colors")
 	}
 
 	if desktop == "KDE" {
 		return GetColorsFromKDE()
-	} else if desktop == "LXQT" {
+	} else if desktop == "LXQt" {
 		return GetColorsFromLXQT()
 	}
 
