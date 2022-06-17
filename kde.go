@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"image/color"
+	"errors"
 	"strings"
 	"strconv"
 
@@ -21,17 +22,28 @@ func GetColorsFromKDE() (*DesktopColor, error) {
 	i, err := ini.Load(f)
 	if err != nil { return nil, err }
 
-	d.Accent              = strToRGBA(i.Section("General").Key("AccentColor").Value(), ",")
-	d.Foreground          = strToRGBA(i.Section("Colors:Window").Key("ForegroundActive").Value(), ",")
-	d.Background          = strToRGBA(i.Section("Colors:Window").Key("BackgroundNormal").Value(), ",")
-	d.BackgroundAlternate = strToRGBA(i.Section("Colors:Window").Key("BackgroundAlternate").Value(), ",")
+	d.Accent, err = strToRGBA(i.Section("General").Key("AccentColor").Value())
+	if err != nil { return nil, err }
+	
+	d.Foreground, err = strToRGBA(i.Section("Colors:Window").Key("ForegroundActive").Value())
+	if err != nil { return nil, err }
+	
+	d.Background, err = strToRGBA(i.Section("Colors:Window").Key("BackgroundNormal").Value())
+	if err != nil { return nil, err }
+	
+	d.BackgroundAlternate, err = strToRGBA(i.Section("Colors:Window").Key("BackgroundAlternate").Value())
+	if err != nil { return nil, err }
 
 	return d, err
 }
 
-func strToRGBA(str string, d string) color.RGBA {
-	s := strings.Split(str, d)
+func strToRGBA(str string) color.RGBA {
+	s := strings.Split(str, ",")
 
+	if len(s) < 3 {
+		return color.RGBA{}, errors.New("color value invalid")
+	}
+	
 	var iArr []uint8
 
 	for _, val := range s {
@@ -39,7 +51,7 @@ func strToRGBA(str string, d string) color.RGBA {
 		iArr = append(iArr, uint8(num))
 	}
 
-	rgba := color.RGBA {
+	rgba := color.RGBA{
 		R: iArr[0],
 		G: iArr[1],
 		B: iArr[2],
