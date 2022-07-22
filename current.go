@@ -20,9 +20,7 @@ func GetColors() (*DesktopColor, error) {
 		return GetColorsFromKDE()
 	} else if desktop == "LXQt" {
 		return GetColorsFromLXQT()
-	} else {
-		return &DesktopColor{}, errors.New("unknown desktop enviornment, can't find colors")
 	}
 
-	return &DesktopColor{}, nil
+	return nil, errors.New("unknown desktop enviornment, can't find colors")
 }
