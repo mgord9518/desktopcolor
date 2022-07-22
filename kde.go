@@ -37,7 +37,7 @@ func GetColorsFromKDE() (*DesktopColor, error) {
 	return d, err
 }
 
-func strToRGBA(str string) color.RGBA {
+func strToRGBA(str string) (color.RGBA, error) {
 	s := strings.Split(str, ",")
 
 	if len(s) < 3 {
