@@ -58,6 +58,6 @@ func strToRGBA(str string) (color.RGBA, error) {
 		A: 255,
 	}
 
-	return rgba
+	return rgba, nil
 }
 
