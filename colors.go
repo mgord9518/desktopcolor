@@ -9,4 +9,8 @@ type DesktopColor struct {
 	Background          color.RGBA
 	BackgroundAlternate color.RGBA
 	Foreground          color.RGBA
+	HighlightBackground color.RGBA
+	HighlightForeground color.RGBA
+	Hyperlink           color.RGBA
+	HyperlinkVisited    color.RGBA
 }
