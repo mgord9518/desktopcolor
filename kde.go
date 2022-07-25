@@ -23,17 +23,36 @@ func GetColorsFromKDE() (*DesktopColor, error) {
 	if err != nil { return nil, err }
 
 	d.Accent, err = strToRGBA(i.Section("General").Key("AccentColor").Value())
-	if err != nil { return nil, err }
-	
+	if err != nil {
+		d.Accent = color.RGBA{
+			R: 0x1f,
+			G: 0x48,
+			B: 0x5e,
+			A: 0xff,
+		}
+	}
+
 	d.Foreground, err = strToRGBA(i.Section("Colors:Window").Key("ForegroundActive").Value())
 	if err != nil { return nil, err }
-	
+
 	d.Background, err = strToRGBA(i.Section("Colors:Window").Key("BackgroundNormal").Value())
 	if err != nil { return nil, err }
-	
+
 	d.BackgroundAlternate, err = strToRGBA(i.Section("Colors:Window").Key("BackgroundAlternate").Value())
 	if err != nil { return nil, err }
 
+	d.HighlightBackground, err = strToRGBA(i.Section("Colors:Selection").Key("BackgroundNormal").Value())
+	if err != nil { return nil, err }
+
+	d.HighlightForeground, err = strToRGBA(i.Section("Colors:Selection").Key("ForegroundNormal").Value())
+	if err != nil { return nil, err }
+	
+	d.Hyperlink, err = strToRGBA(i.Section("Colors:Window").Key("ForegroundLink").Value())
+	if err != nil { return nil, err }
+	
+	d.HyperlinkVisited, err = strToRGBA(i.Section("Colors:Window").Key("ForegroundVisited").Value())
+	if err != nil { return nil, err }
+	
 	return d, err
 }
 
